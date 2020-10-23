@@ -23,10 +23,7 @@ const bookContextReducer = (state, action) => {
 };
 
 const BookContextProvider = (props) => {
-  // const [books, setBooks] = useState([
-  //   { id: uuid(), title: "Book 1", author: "Author 1" },
-  //   { id: uuid(), title: "Book 2", author: "Author 2" },
-  // ]);
+
   const [books, dispatchBookState] = useReducer(bookContextReducer, [], getBooksFromLocalStorage);
 
   useEffect(() => {
