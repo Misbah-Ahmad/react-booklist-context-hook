@@ -1,10 +1,15 @@
 import React, { useContext, useState } from 'react';
 import { BookContext } from '../Contexts/BookContext';
+import { bookMachiineEvents } from '../Machines/BookMachine';
 
 const BookForm = () => {
-    
-    const { dispatchBookState } = useContext(BookContext);
-    
+
+    const { send, current } = useContext(BookContext);
+  
+    if (current.matches("show_book")) {
+        send(bookMachiineEvents.ADD_NEW_BOOK);
+    }
+
     const [title, setTitle] = useState('');
 
     const [author, setAuthor] = useState('');
@@ -12,7 +17,7 @@ const BookForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const book = {title, author};
-        dispatchBookState({type: 'ADD_BOOK', book});
+        send(bookMachiineEvents.SAVE_NEW_BOOK, {book});
         setTitle('');
         setAuthor('');
     }

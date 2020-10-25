@@ -1,4 +1,4 @@
-A book list app using React Context api and React Hooks.
+A book list app using React Context api and React Hooks and xstate.
 ## Available Scripts
 
 In the project directory, you can run:

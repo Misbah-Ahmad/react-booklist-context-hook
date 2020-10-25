@@ -1,37 +1,24 @@
-import React, { createContext, useEffect, useReducer } from "react";
-import { v4 as uuid } from "uuid";
+import React, { createContext, useEffect } from "react";
+import { useMachine } from "@xstate/react";
+import bookMachiine from "../Machines/BookMachine";
 
 export const BookContext = createContext();
 
 const saveBooksToLocalStorage = (books) => {
-  localStorage.setItem('hook_reading_list', JSON.stringify(books));
-};
-const getBooksFromLocalStorage = () => {
-  return JSON.parse(localStorage.getItem('hook_reading_list')) || [];
-};
-
-
-const bookContextReducer = (state, action) => {
-  switch (action.type) {
-    case "ADD_BOOK":
-      return [...state, { id: uuid(), ...action.book }];
-    case "REMOVE_BOOK":
-      return state.filter((book) => book.id !== action.id);
-    default:
-      return state;
-  }
+  localStorage.setItem("hook_reading_list", JSON.stringify(books));
 };
 
 const BookContextProvider = (props) => {
+  const [current, send] = useMachine(bookMachiine);
 
-  const [books, dispatchBookState] = useReducer(bookContextReducer, [], getBooksFromLocalStorage);
+  const { books } = current.context;
 
   useEffect(() => {
     saveBooksToLocalStorage(books);
   }, [books]);
 
   return (
-    <BookContext.Provider value={{ books, dispatchBookState }}>
+    <BookContext.Provider value={{ books, send, current }}>
       {props.children}
     </BookContext.Provider>
   );
